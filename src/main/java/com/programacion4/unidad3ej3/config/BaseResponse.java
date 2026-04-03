@@ -15,6 +15,8 @@ public class BaseResponse<T> {
     private final String message;
     private final List<String> errors;
     private final String timestamp;
+    private final Integer status;
+    private final String path;
 
     public static <T> BaseResponse<T> ok(T data, String message) {
         return BaseResponse.<T>builder()
@@ -22,6 +24,8 @@ public class BaseResponse<T> {
                 .message(message)
                 .errors(null)
                 .timestamp(getCurrentTimestamp())
+                .status(null)
+                .path(null)
                 .build();
     }
 

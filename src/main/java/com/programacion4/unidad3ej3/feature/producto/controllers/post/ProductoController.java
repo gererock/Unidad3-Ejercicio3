@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import com.programacion4.unidad3ej3.config.BaseResponse;
 import com.programacion4.unidad3ej3.feature.producto.dtos.request.ProductoCreateRequestDto;
+import com.programacion4.unidad3ej3.feature.producto.dtos.request.ProductoPatchRequestDto;
+import com.programacion4.unidad3ej3.feature.producto.dtos.request.ProductoUpdateRequestDto;
 import com.programacion4.unidad3ej3.feature.producto.dtos.response.ProductoResponseDto;
 import com.programacion4.unidad3ej3.feature.producto.services.impl.domain.ProductoService;
 
@@ -51,11 +53,43 @@ public class ProductoController {
     @GetMapping("/{id}")
     public ResponseEntity<BaseResponse<ProductoResponseDto>> obtenerPorId(@PathVariable Long id) {
 
-    ProductoResponseDto producto = productoService.obtenerPorId(id);
+        ProductoResponseDto producto = productoService.obtenerPorId(id);
 
-    BaseResponse<ProductoResponseDto> response =
-            BaseResponse.ok(producto, "Producto obtenido correctamente");
+        BaseResponse<ProductoResponseDto> response =
+                BaseResponse.ok(producto, "Producto obtenido correctamente");
 
-    return ResponseEntity.ok(response);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BaseResponse<ProductoResponseDto>> actualizarTotal(
+            @PathVariable Long id,
+            @Valid @RequestBody ProductoUpdateRequestDto dto) {
+
+        ProductoResponseDto productoActualizado = productoService.actualizarTotal(id, dto);
+
+        BaseResponse<ProductoResponseDto> response =
+                BaseResponse.ok(productoActualizado, "Producto actualizado correctamente");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<BaseResponse<ProductoResponseDto>> actualizarParcial(
+            @PathVariable Long id,
+            @RequestBody ProductoPatchRequestDto dto) {
+
+        ProductoResponseDto productoActualizado = productoService.actualizarParcial(id, dto);
+
+        BaseResponse<ProductoResponseDto> response =
+                BaseResponse.ok(productoActualizado, "Producto actualizado parcialmente correctamente");
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+        productoService.eliminar(id);
+        return ResponseEntity.noContent().build();
     }
 }
