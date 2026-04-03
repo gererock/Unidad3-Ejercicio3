@@ -1,0 +1,45 @@
+package com.programacion4.unidad3ej3.feature.producto.services.impl.domain;
+
+import org.springframework.stereotype.Service;
+
+import com.programacion4.unidad3ej3.config.exceptions.ConflictException;
+import com.programacion4.unidad3ej3.feature.producto.dtos.request.ProductoCreateRequestDto;
+import com.programacion4.unidad3ej3.feature.producto.dtos.response.ProductoResponseDto;
+import com.programacion4.unidad3ej3.feature.producto.mappers.ProductoMapper;
+import com.programacion4.unidad3ej3.feature.producto.models.Producto;
+import com.programacion4.unidad3ej3.feature.producto.repositories.IProductoRepository;
+
+@Service
+public class ProductoService {
+
+    private final IProductoRepository productoRepository;
+
+    public ProductoService(IProductoRepository productoRepository) {
+        this.productoRepository = productoRepository;
+    }
+
+    public ProductoResponseDto crearProducto(ProductoCreateRequestDto dto) {
+
+        String nombreFormateado = capitalizar(dto.getNombre());
+        String descripcionFormateada = capitalizar(dto.getDescripcion());
+
+        if (productoRepository.existsByNombre(nombreFormateado)) {
+            throw new ConflictException("Ya existe un producto con ese nombre");
+        }
+
+        Producto producto = ProductoMapper.toEntity(dto);
+
+        producto.setNombre(nombreFormateado);
+        producto.setDescripcion(descripcionFormateada);
+        producto.setEstaEliminado(false);
+
+        Producto productoGuardado = productoRepository.save(producto);
+
+        return ProductoMapper.toResponseDto(productoGuardado);
+    }
+
+    private String capitalizar(String texto) {
+        texto = texto.trim().toLowerCase();
+        return texto.substring(0, 1).toUpperCase() + texto.substring(1);
+    }
+}
