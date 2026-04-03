@@ -1,5 +1,8 @@
 package com.programacion4.unidad3ej3.feature.producto.services.impl.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.programacion4.unidad3ej3.config.exceptions.ConflictException;
@@ -36,6 +39,18 @@ public class ProductoService {
         Producto productoGuardado = productoRepository.save(producto);
 
         return ProductoMapper.toResponseDto(productoGuardado);
+    }
+
+    public List<ProductoResponseDto> obtenerTodos() {
+        List<ProductoResponseDto> productosResponse = new ArrayList<>();
+
+        Iterable<Producto> productos = productoRepository.findAll();
+
+        for (Producto producto : productos) {
+            productosResponse.add(ProductoMapper.toResponseDto(producto));
+        }
+
+        return productosResponse;
     }
 
     private String capitalizar(String texto) {

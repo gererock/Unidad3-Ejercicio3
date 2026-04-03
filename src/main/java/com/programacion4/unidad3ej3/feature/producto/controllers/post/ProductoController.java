@@ -1,5 +1,7 @@
 package com.programacion4.unidad3ej3.feature.producto.controllers.post;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,5 +35,16 @@ public class ProductoController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<BaseResponse<List<ProductoResponseDto>>> obtenerTodos() {
+
+        List<ProductoResponseDto> productos = productoService.obtenerTodos();
+
+        BaseResponse<List<ProductoResponseDto>> response =
+                BaseResponse.ok(productos, "Listado de productos obtenido correctamente");
+
+        return ResponseEntity.ok(response);
     }
 }
