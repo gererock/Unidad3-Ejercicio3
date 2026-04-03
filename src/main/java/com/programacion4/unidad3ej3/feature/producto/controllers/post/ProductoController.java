@@ -47,4 +47,15 @@ public class ProductoController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<BaseResponse<ProductoResponseDto>> obtenerPorId(@PathVariable Long id) {
+
+    ProductoResponseDto producto = productoService.obtenerPorId(id);
+
+    BaseResponse<ProductoResponseDto> response =
+            BaseResponse.ok(producto, "Producto obtenido correctamente");
+
+    return ResponseEntity.ok(response);
+    }
 }
