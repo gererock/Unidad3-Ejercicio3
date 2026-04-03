@@ -99,7 +99,7 @@ public class ProductoService {
 
         return ProductoMapper.toResponseDto(productoActualizado);
     }
-    
+
     public void eliminar(Long id) {
         Producto producto = productoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No existe un producto con id: " + id));
